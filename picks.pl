@@ -20,9 +20,18 @@ for my $majority (@{$res->{majorities}}) {
 	}
 }
 
-my $body = Dumper map  { $_->[0] } sort { $a->[1] <=> $b->[1] } map  { [$_, $_=~/(\d+)/] } @majs;
+my @sorted = map  { $_->[0] } sort { $a->[1] <=> $b->[1] } map  { [$_, $_=~/(\d+)/] } @majs;
 
 my $filename = 'C:\\Users\\thomasdr\\Desktop\\picks.txt';
 open(my $fh, '>', $filename) or die;
-print $fh $body;
+
+my $index = 1;
+for my $pick (@sorted) {
+	if ($pick =~ /\d/a) {
+		substr($pick, $-[0], 0) = "\t";
+		print $fh "$index:\t$pick\n";
+		$index++;
+	}
+}
+
 close $fh;
